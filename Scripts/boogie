@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# find the source directory for this script even if it's been symlinked [issue #185]
+# from https://stackoverflow.com/questions/59895/
+
+# ported from Dafny repo
+
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+    SOURCE="$(readlink "$SOURCE")"
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+BOOGIE_ROOT="$( cd -P "$( dirname $( dirname "$SOURCE" ))" && pwd )"
+
+MY_OS=$(uname -s)
+if [ "${MY_OS:0:5}" == "MINGW" ] || [ "${MY_OS:0:6}" == "CYGWIN" ]; then
+    BOOGIE_EXE_NAME="Boogie.exe"
+else
+    BOOGIE_EXE_NAME="BoogieDriver.dll"
+fi
+BOOGIE="$BOOGIE_ROOT/Source/BoogieDriver/bin/Debug/netcoreapp3.1/$BOOGIE_EXE_NAME"
+if [[ ! -e "$BOOGIE" ]]; then
+    echo "Error: $BOOGIE_EXE_NAME not found at $BOOGIE."
+    exit 1
+fi
+
+if [ "${MY_OS:0:5}" == "MINGW" ] || [ "${MY_OS:0:6}" == "CYGWIN" ]; then
+    "$BOOGIE" "$@"
+else
+    DOTNET=$(type -p dotnet)
+    if [[ ! -x "$DOTNET" ]]; then
+        echo "Error: Boogie requires .NET Core to run on non-Windows systems."
+        exit 1
+    fi
+    "$DOTNET" "$BOOGIE" "$@"
+fi
