@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.IO;
 
+using System.Text.Json;
+
 namespace Microsoft.Boogie
 {
   public class OnlyBoogie
@@ -18,9 +20,10 @@ namespace Microsoft.Boogie
 
       if (!CommandLineOptions.Clo.Parse(args))
       {
+        ExecutionEngine.printer.ErrorWriteLine(Console.Out, "*** Error: No parse for CLO.");
         return 1;
       }
-      
+
       if (CommandLineOptions.Clo.ProcessInfoFlags())
       {
         return 0;
@@ -58,6 +61,26 @@ namespace Microsoft.Boogie
         }
 
         Console.WriteLine("--------------------");
+      }
+      //TODO [JEFF] Same content stored at Clo.Environment
+      if(CommandLineOptions.Clo.UseJSONConfig.Length > 0)
+      {
+          string config = CommandLineOptions.Clo.UseJSONConfig;
+          Console.WriteLine("USING {0} as JSON config", config);
+          var jsonString = File.ReadAllText(config);
+          var jsonObj = JsonDocument.Parse(jsonString);
+          JsonElement se = jsonObj.RootElement.GetProperty("solvers");
+          foreach(var s in se.EnumerateArray())
+          {
+              Console.WriteLine(s.ToString());
+              Console.WriteLine(jsonObj.RootElement.GetProperty("solvers_detail").GetProperty(s.ToString()));
+          }
+          // Console.WriteLine(se.GetProperty("z3_latest"));
+          // foreach(JsonElement e in solvers)
+          // {
+          //     Console.WriteLine(e.GetProperty("bin_loc"));
+          // }
+          return 1;
       }
 
       Helpers.ExtraTraceInformation("Becoming sentient");

@@ -383,7 +383,7 @@ namespace Microsoft.Boogie
         Console.WriteLine(AttributeHelp);
         return true;
       }
-      
+
       return false;
     }
 
@@ -582,6 +582,9 @@ namespace Microsoft.Boogie
     public bool SoundnessSmokeTest = false;
     public int KInductionDepth = -1;
     public int EnableUnSatCoreExtract = 0;
+
+    // TODO [JEFF] additional clo options
+    public String UseJSONConfig = "";
 
     private string /*!*/
       _logPrefix = "";
@@ -1456,6 +1459,19 @@ namespace Microsoft.Boogie
         case "kInductionDepth":
           ps.GetNumericArgument(ref KInductionDepth);
           return true;
+
+          // TODO [JEFF]
+        case "useJSONConfig":
+        {
+            if(ps.ConfirmArgumentCount(1))
+            {
+                UseJSONConfig = args[ps.i];
+            }
+            else {
+                ps.Error("JSON Config only takes 1 arg");
+            }
+            return true;
+        }
 
         default:
           bool optionValue = false;

@@ -371,7 +371,7 @@ namespace Microsoft.Boogie
       MessageIfVerifies = implementation.FindStringAttribute("msg_if_verifies");
     }
   }
-  
+
   public class ExecutionEngine
   {
     public static OutputPrinter printer;
