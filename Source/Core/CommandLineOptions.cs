@@ -675,6 +675,9 @@ namespace Microsoft.Boogie
     public bool CoalesceBlocks = true;
     public bool PruneInfeasibleEdges = true;
 
+    //TODO [JEFF]
+    public bool TryModFix = false;
+
     [Rep] public ProverFactory TheProverFactory;
     public string ProverDllName;
     public bool ProverHelpRequested = false;
@@ -1524,7 +1527,10 @@ namespace Microsoft.Boogie
               ps.CheckBooleanFlag("trustNoninterference", ref TrustNoninterference) ||
               ps.CheckBooleanFlag("useBaseNameForFileName", ref UseBaseNameForFileName) ||
               ps.CheckBooleanFlag("freeVarLambdaLifting", ref FreeVarLambdaLifting) ||
-              ps.CheckBooleanFlag("warnNotEliminatedVars", ref WarnNotEliminatedVars)
+              ps.CheckBooleanFlag("warnNotEliminatedVars", ref WarnNotEliminatedVars) ||
+
+              //TODO [JEFF]
+              ps.CheckBooleanFlag("tryModFix", ref TryModFix)
           )
           {
             // one of the boolean flags matched

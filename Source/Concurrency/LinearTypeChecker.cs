@@ -201,10 +201,10 @@ namespace Microsoft.Boogie
     public void TypeCheck()
     {
       this.VisitProgram(program);
-      
+
       var permissionTypes = GetPermissionTypes();
       ProcessCollectors(permissionTypes);
-      
+
       if (checkingContext.ErrorCount > 0)
       {
         return;

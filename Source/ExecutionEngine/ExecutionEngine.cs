@@ -730,7 +730,17 @@ namespace Microsoft.Boogie
       if (errorCount != 0)
       {
         Console.WriteLine("{0} type checking errors detected in {1}", errorCount, GetFileNameForConsole(bplFileName));
-        return PipelineOutcome.TypeCheckingError;
+        if(CommandLineOptions.Clo.TryModFix)
+        {
+            Console.WriteLine("Trying to fix modifies issues");
+            CommandLineOptions.Clo.DoModSetAnalysis = true;
+            CollectModSets(program);
+            int ec2 = program.Typecheck();
+            Console.WriteLine("{0} type checking errors {1} after modifies fix", ec2, GetFileNameForConsole(bplFileName));
+            errorCount = ec2;
+        }
+        if (errorCount != 0)
+            return PipelineOutcome.TypeCheckingError;
       }
 
       if (PolymorphismChecker.IsMonomorphic(program))
@@ -754,7 +764,7 @@ namespace Microsoft.Boogie
         Console.WriteLine(
           "Option /useArrayTheory only supported for monomorphic programs, polymorphism is detected in input program, try using -monomorphize");
         return PipelineOutcome.FatalError;
-      } 
+      }
       else if (program.TopLevelDeclarations.OfType<DatatypeTypeCtorDecl>().Any())
       {
         Console.WriteLine(
@@ -762,6 +772,7 @@ namespace Microsoft.Boogie
         return PipelineOutcome.FatalError;
       }
 
+      //TODO [JEFF] See if we can weave in mod fix here
       CollectModSets(program);
 
       civlTypeChecker = new CivlTypeChecker(program);
