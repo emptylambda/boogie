@@ -75,11 +75,6 @@ namespace Microsoft.Boogie
               Console.WriteLine(s.ToString());
               Console.WriteLine(jsonObj.RootElement.GetProperty("solvers_detail").GetProperty(s.ToString()));
           }
-          // Console.WriteLine(se.GetProperty("z3_latest"));
-          // foreach(JsonElement e in solvers)
-          // {
-          //     Console.WriteLine(e.GetProperty("bin_loc"));
-          // }
           return 1;
       }
 
