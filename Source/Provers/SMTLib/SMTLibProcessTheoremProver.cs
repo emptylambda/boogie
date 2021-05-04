@@ -112,6 +112,12 @@ namespace Microsoft.Boogie.SMTLib
 
     private void SetupAxiomBuilder(VCExpressionGenerator gen)
     {
+      //TODO [JEFF] AxBuilder seems to be compatible ONLY with Z3
+      if(((SMTLibProverOptions)this.options).Solver == SolverKind.VANILLA)
+      {
+        AxBuilder = null;
+        return;
+      }
       switch (CommandLineOptions.Clo.TypeEncodingMethod)
       {
         case CommandLineOptions.TypeEncoding.Arguments:

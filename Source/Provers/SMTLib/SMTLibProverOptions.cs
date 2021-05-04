@@ -29,7 +29,8 @@ namespace Microsoft.Boogie.SMTLib
   {
     Z3,
     CVC4,
-    YICES2
+    YICES2,
+    VANILLA
   }
 
   public class SMTLibProverOptions : ProverOptions
@@ -109,6 +110,10 @@ namespace Microsoft.Boogie.SMTLib
           case "yices2":
             Solver = SolverKind.YICES2;
             break;
+          case "generic":
+          case "vanilla":
+            Solver = SolverKind.VANILLA;
+            break;
           default:
             ReportError("Invalid SOLVER value; must be 'Z3' or 'CVC4' or 'Yices2'");
             return false;
@@ -142,6 +147,11 @@ namespace Microsoft.Boogie.SMTLib
         case SolverKind.YICES2:
           SolverArguments.Add("--incremental");
           if (Logic == null) Logic = "ALL";
+          break;
+        case SolverKind.VANILLA:
+          ProverName = "z3"; // TODO [JEFF] using dummy name for now
+          // Z3.SetDefaultOptions(this); // TODO [JEFF] Intentionally NOT using Z3 DefaultOptions
+          SolverArguments.Add("-smt2 -in");
           break;
       }
 

@@ -135,6 +135,11 @@ The generic options may or may not be used by the prover plugin.
         return ConfirmProverPath(ProverPath);
       }
 
+      if(CommandLineOptions.Clo.Trace)
+      {
+          Console.WriteLine("ProverName: " + ProverName);
+      }
+
       var exes = new string[] {ProverName, ProverName + ".exe"};
 
       // Otherwise we look in the executable directory

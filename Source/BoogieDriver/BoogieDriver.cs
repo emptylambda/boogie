@@ -63,6 +63,7 @@ namespace Microsoft.Boogie
         Console.WriteLine("--------------------");
       }
       //TODO [JEFF] Same content stored at Clo.Environment
+      //TODO [JEFF] Introduce JSon Config
       if(CommandLineOptions.Clo.UseJSONConfig.Length > 0)
       {
           string config = CommandLineOptions.Clo.UseJSONConfig;
