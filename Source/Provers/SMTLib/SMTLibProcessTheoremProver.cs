@@ -74,7 +74,17 @@ namespace Microsoft.Boogie.SMTLib
       this.gen = gen;
       this.usingUnsatCore = false;
 
+      if(CommandLineOptions.Clo.Trace)
+      {
+          Console.WriteLine("options.SOLVER_KIND: " + ((SMTLibProverOptions) options).Solver);
+      }
+
       SetupAxiomBuilder(gen);
+
+      if(CommandLineOptions.Clo.Trace)
+      {
+          Console.WriteLine("Done with AxiomBuilder setup");
+      }
 
       Namer = new SMTLibNamer();
       ctx.parent = this;
@@ -115,7 +125,11 @@ namespace Microsoft.Boogie.SMTLib
       //TODO [JEFF] AxBuilder seems to be compatible ONLY with Z3
       if(((SMTLibProverOptions)this.options).Solver == SolverKind.VANILLA)
       {
-        AxBuilder = null;
+        AxBuilder = new TypeAxiomBuilderPremisses(gen);
+        AxBuilder.LimitedSetup();
+        // null causes crashes, not sure why Monomorphic can make do with that
+        // AxBuilder.NoSetup();
+        // AxBuilder = null;
         return;
       }
       switch (CommandLineOptions.Clo.TypeEncodingMethod)

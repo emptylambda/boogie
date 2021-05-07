@@ -558,6 +558,23 @@ namespace Microsoft.Boogie.TypeErasure
       GetBasicTypeRepr(Type.RegEx);
     }
 
+    // TODO [JEFF] minimum setup for less powerful solvers
+    public virtual void LimitedSetup()
+    {
+      GetBasicTypeRepr(Type.Int);
+      GetBasicTypeRepr(Type.Real);
+      GetBasicTypeRepr(Type.Bool);
+      //GetBasicTypeRepr(Type.RMode);
+      GetBasicTypeRepr(Type.String);
+      // GetBasicTypeRepr(Type.RegEx);
+    }
+
+    public virtual void NoSetup()
+    {
+        Console.WriteLine("Invoking NoSetup for AxBuilder");
+    }
+
+
     // constructor to allow cloning
     internal TypeAxiomBuilder(TypeAxiomBuilder builder)
     {
@@ -676,6 +693,21 @@ namespace Microsoft.Boogie.TypeErasure
       GetTypeCasts(Type.RMode);
       GetTypeCasts(Type.String);
       GetTypeCasts(Type.RegEx);
+    }
+
+    public override void LimitedSetup()
+    {
+      base.LimitedSetup();
+      GetTypeCasts(Type.Int);
+      GetTypeCasts(Type.Real);
+      GetTypeCasts(Type.Bool);
+      //GetTypeCasts(Type.RMode);
+      GetTypeCasts(Type.String);
+    }
+
+    public override void NoSetup()
+    {
+        base.NoSetup();
     }
 
     // generate inverse axioms for casts (castToU(castFromU(x)) = x, under certain premisses)

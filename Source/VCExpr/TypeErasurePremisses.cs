@@ -97,6 +97,21 @@ namespace Microsoft.Boogie.TypeErasure
       base.Setup();
     }
 
+    public override void LimitedSetup()
+    {
+        TypeFunction = HelperFuns.BoogieFunction("type", U, T);
+        base.LimitedSetup();
+    }
+
+    public override void NoSetup()
+    {
+        // TypeFunction = HelperFuns.BoogieFunction("type", U, T);
+        if(CommandLineOptions.Clo.Trace)
+            Console.WriteLine("AxBuilder enters NoSetup() at TypeEraserPremisses");
+        base.NoSetup();
+    }
+
+
     ////////////////////////////////////////////////////////////////////////////
 
     // generate axioms of the kind "forall x:U. {Int2U(U2Int(x))}
